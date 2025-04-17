@@ -51,7 +51,7 @@ h1 {
 
 #sliderContainer {
   display: grid;
-  grid-template-columns: 85% 10% 5%;
+  grid-template-columns: 84% 9% 5dvh;
   grid-template-rows: auto 5dvh;
   align-items: center;
   justify-content: center;
@@ -67,6 +67,52 @@ h1 {
 #inputElement {
   grid-column: 1/2;
   grid-row: 2/3;
+  appearance: none;
+  outline: none;
+  border-radius: 1dvh;
+  cursor: cell;
+  
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  --track-height:.5dvh;
+  appearance: none;
+  height: var(--track-height);
+  background-color: #515151;
+  border-radius: 1dvh;
+  transition: all 0.3s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  --track-radius:3dvh;
+  appearance: none;
+  margin-top: calc((var(--track-radius) - var(--track-height)) / 2 * -1);
+  width: var(--track-radius);
+  height: var(--track-radius);
+  border-radius: 100%;
+  background-color: #d9d9d9;
+  transition: all 0.3s ease;
+}
+
+#inputElement:disabled {
+  cursor: no-drop;
+}
+
+input[type="range"]:disabled::-webkit-slider-runnable-track {
+  background-color: #3c3c3c;
+}
+
+input[type="range"]:disabled::-webkit-slider-thumb {
+  background-color: #616161;
+}
+
+input[type="range"]:hover::-webkit-slider-thumb {
+  transform: scale(1.2);
+  box-shadow: 0 0 1.2dvh rgba(255, 255, 255, 0.7);
+}
+
+input[type="range"]:active::-webkit-slider-thumb {
+  width: calc(var(--track-radius) + 1.5dvh);
 }
 
 #sliderValue { 
@@ -85,12 +131,15 @@ h1 {
 
 .activationButton {
   height: 100%;
+  width: 100%;
   grid-column: 3/4;
   grid-row: 2/3;
   color: #d9d9d9;
-  border: 1px solid white;
-  border-radius: 100%;
+  border: none;
+  box-shadow: 0 0 .7dvh rgba(255, 255, 255, 0.9);
+  border-radius: 10dvw;
   background-color: transparent;
+  transition: all 0.4s ease;
 }
 
 .activationButton svg {

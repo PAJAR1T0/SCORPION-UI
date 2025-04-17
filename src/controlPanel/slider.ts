@@ -45,7 +45,7 @@ export class Slider {
 
     createActivationButton() {
         this.activationButton = document.createElement('button');
-        this.activationButton.innerHTML = lockLogo;
+        this.activationButton.innerHTML = unlockLogo;
         this.activationButton.classList.add('activationButton');
         this.sliderContainer.appendChild(this.activationButton);
         this.activationButtonEventListener();
@@ -55,6 +55,8 @@ export class Slider {
         this.activationButton.addEventListener('click', () => {
             this.isActive = ( this.isActive ) ? false : true;
             this.activationButton.id = ( this.isActive ) ? '' : 'buttonInactive';
+            this.activationButton.innerHTML = ( this.isActive ) ? unlockLogo : lockLogo;
+            this.inputElement.disabled = ( this.isActive ) ? false : true;
         })
     };
 
