@@ -3,6 +3,19 @@
   src: url('/fonts/jersey-20-latin-400-normal.woff2');
 }
 
+@keyframes shake {
+  0%   { transform: translateX(0); }
+  25%  { transform: translateX(-5px); }
+  50%  { transform: translateX(5px); }
+  75%  { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
+:root {
+  --track-height: 0.5dvh;
+  --track-radius: 3dvh;
+}
+
 body {
   background-color: #2d2d2d;
   color: white;
@@ -70,22 +83,80 @@ h1 {
   appearance: none;
   outline: none;
   border-radius: 1dvh;
+  border: none;
   cursor: cell;
   
 }
 
-input[type="range"]::-webkit-slider-runnable-track {
-  --track-height:.5dvh;
-  appearance: none;
-  height: var(--track-height);
-  background-color: #515151;
-  border-radius: 1dvh;
+#inputElement:disabled {
+  cursor: not-allowed;
+}
+
+input[type='text'] {
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-family: 'Jersey 20';
   transition: all 0.3s ease;
 }
 
-input[type="range"]::-webkit-slider-thumb {
-  --track-radius:3dvh;
+input[type='text']:hover {
+  transform: scale(1.2);
+}
+
+input[type='text']:focus {
+  transform: scale(1.4);
+  outline: none;
+}
+
+input[type='text']:disabled {
+  color: #616161;
+  cursor: not-allowed;
+}
+
+.shake {
+  animation: shake 0.4s ease;
+  transform: scale(1.4);
+}
+
+/* Estilo base */
+input[type="range"] {
   appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  width: 100%;
+  height: 4dvh;
+  cursor: pointer;
+}
+
+/* TRACK - Chrome, Safari, Edge (WebKit) */
+input[type="range"]::-webkit-slider-runnable-track {
+  height: var(--track-height);
+  background: radial-gradient(circle, #515151, #2d2d2d);
+  transition: all 0.3s ease;
+  border-radius: 1dvh;
+}
+
+/* TRACK - Firefox */
+input[type="range"]::-moz-range-track {
+  height: var(--track-height);
+  background: radial-gradient(circle, #515151, #2d2d2d);
+  transition: all 0.3s ease;
+  border-radius: 1dvh;
+}
+
+/* TRACK - IE/Edge antiguo */
+input[type="range"]::-ms-track {
+  height: var(--track-height);
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+
+/* THUMB - Chrome, Safari, Edge */
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
   margin-top: calc((var(--track-radius) - var(--track-height)) / 2 * -1);
   width: var(--track-radius);
   height: var(--track-radius);
@@ -94,24 +165,63 @@ input[type="range"]::-webkit-slider-thumb {
   transition: all 0.3s ease;
 }
 
-#inputElement:disabled {
-  cursor: no-drop;
+/* THUMB - Firefox */
+input[type="range"]::-moz-range-thumb {
+  width: var(--track-radius);
+  height: var(--track-radius);
+  border-radius: 100%;
+  background-color: #d9d9d9;
+  transition: all 0.3s ease;
 }
 
+/* THUMB - IE/Edge antiguo */
+input[type="range"]::-ms-thumb {
+  width: var(--track-radius);
+  height: var(--track-radius);
+  border-radius: 100%;
+  background-color: #d9d9d9;
+  transition: all 0.3s ease;
+}
+
+/* DISABLED - WebKit */
 input[type="range"]:disabled::-webkit-slider-runnable-track {
   background-color: #3c3c3c;
 }
-
 input[type="range"]:disabled::-webkit-slider-thumb {
   background-color: #616161;
 }
 
+/* DISABLED - Firefox */
+input[type="range"]:disabled::-moz-range-track {
+  background-color: #3c3c3c;
+}
+input[type="range"]:disabled::-moz-range-thumb {
+  background-color: #616161;
+}
+
+/* DISABLED - IE/Edge antiguo */
+input[type="range"]:disabled::-ms-track {
+  background-color: #3c3c3c;
+}
+input[type="range"]:disabled::-ms-thumb {
+  background-color: #616161;
+}
+
+/* HOVER y ACTIVE - WebKit */
 input[type="range"]:hover::-webkit-slider-thumb {
   transform: scale(1.2);
   box-shadow: 0 0 1.2dvh rgba(255, 255, 255, 0.7);
 }
-
 input[type="range"]:active::-webkit-slider-thumb {
+  width: calc(var(--track-radius) + 1.5dvh);
+}
+
+/* HOVER y ACTIVE - Firefox */
+input[type="range"]:hover::-moz-range-thumb {
+  transform: scale(1.2);
+  box-shadow: 0 0 1.2dvh rgba(255, 255, 255, 0.7);
+}
+input[type="range"]:active::-moz-range-thumb {
   width: calc(var(--track-radius) + 1.5dvh);
 }
 
@@ -135,11 +245,18 @@ input[type="range"]:active::-webkit-slider-thumb {
   grid-column: 3/4;
   grid-row: 2/3;
   color: #d9d9d9;
-  border: none;
-  box-shadow: 0 0 .7dvh rgba(255, 255, 255, 0.9);
+  border: 1px solid white;
   border-radius: 10dvw;
   background-color: transparent;
   transition: all 0.4s ease;
+}
+
+.activationButton:hover {
+  box-shadow: 0 0 1dvh rgba(255, 255, 255, 1);
+}
+
+.activationButton:active {
+  box-shadow: 0 0 2.5dvh rgba(255, 255, 255, 1);
 }
 
 .activationButton svg {
@@ -148,7 +265,7 @@ input[type="range"]:active::-webkit-slider-thumb {
 
 .activationButton:hover {
   background-color: #7c7c7c;
-  border: none;
+  color: white;
   transform: scale(1.2);
   cursor: pointer;
 }
@@ -159,4 +276,7 @@ input[type="range"]:active::-webkit-slider-thumb {
   transform: scale(1.4);
   cursor: pointer;
 }
+
+
+
 

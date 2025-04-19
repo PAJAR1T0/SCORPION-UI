@@ -1,5 +1,15 @@
 import '../assets/style.css';
-import { Header, ModelView, ControlPanel, Slider } from './index';
+import { Header, ModelView, ControlPanel } from './index';
+import { sliderDictionaryInterface } from './controlPanel/index'
+
+const slidersDictionaryArray: sliderDictionaryInterface[] = [
+    {id: 1, name : 'Base', minValue : 0, maxValue: 180, defaultValue: 90, step : 1},
+    {id: 2, name : 'Rotation module 1', minValue : 0, maxValue: 180, defaultValue: 90, step : 1},
+    {id: 3, name : 'Rotation module 2', minValue : 0, maxValue: 180, defaultValue: 90, step : 1},
+    {id: 4, name : 'Rotation module 3', minValue : 0, maxValue: 180, defaultValue: 90, step : 1},
+    {id: 5, name : 'Rotation module 4', minValue : 0, maxValue: 180, defaultValue: 90, step : 1},
+    {id: 6, name : 'Arm', minValue : 0, maxValue: 180, defaultValue: 90, step : 1},
+];
 
 const app = document.getElementById('app');
 app!.id = 'app';
@@ -12,9 +22,4 @@ modelView.addDiv();
 
 const controlPanel = new ControlPanel(app!);
 controlPanel.addDiv();
-
-const slider1 = new Slider(controlPanel.ControlPanelContainer, 1, 'Prueba 1', 0, 180, 90);
-slider1.addSlider();
-
-const slider2 = new Slider(controlPanel.ControlPanelContainer, 2, 'Prueba 2', 0, 180, 90);
-slider2.addSlider();
+controlPanel.addSliders(slidersDictionaryArray);
