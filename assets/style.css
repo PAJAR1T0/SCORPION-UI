@@ -54,6 +54,10 @@ h1 {
   grid-row: 2/3;
 }
 
+#canvasContainer:hover {
+  cursor: cell;
+}
+
 #controlPanelContainer {
   height: 90dvh;
   width: 60dvw;
