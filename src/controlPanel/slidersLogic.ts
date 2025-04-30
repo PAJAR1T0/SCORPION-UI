@@ -1,12 +1,22 @@
 import { lockLogo, unlockLogo } from ".";
+import { THREE } from "../modelView/index";
+import { ModelView } from "../.";
 
 export interface sliderDictionaryInterface {
     id: number, 
     name: string, 
     minValue: number, 
     maxValue: number, 
-    defaultValue: number,
-    step: number
+    value: number,
+    step: number,
+    pieceInfo : {
+        axesName: string,
+        rotationAxe : string,
+        extraOperation : {type: string, number : number}[] | undefined,
+        object3D: THREE.Object3D | undefined,
+        animations: undefined | THREE.AnimationAction[],
+    }
+    
 };
 
 export class Slider {
@@ -17,7 +27,7 @@ export class Slider {
     activationButton!: HTMLButtonElement;
     sliderInputValue!: SliderInputValue;
 
-    constructor(private hostDiv: HTMLElement, private dictionaryArray: sliderDictionaryInterface) {
+    constructor(private hostDiv: HTMLElement, private dictionaryArray: sliderDictionaryInterface, private modelViewClass: ModelView) {
         this.isActive = true;
     };
 
@@ -38,15 +48,14 @@ export class Slider {
         this.inputElement.type = 'range';
         this.inputElement.min = this.dictionaryArray.minValue.toString();
         this.inputElement.max = this.dictionaryArray.maxValue.toString();
-        this.inputElement.value = this.dictionaryArray.defaultValue.toString();
+        this.inputElement.value = this.dictionaryArray.value.toString();
         this.inputElement.step = this.dictionaryArray.step.toString();
         this.inputElement.id = 'inputElement';
         this.sliderContainer.appendChild(this.inputElement);
     };
 
     createSliderValueInput() {
-        this.sliderInputValue = new SliderInputValue(this.sliderContainer, this.inputElement, 
-            this.dictionaryArray.minValue, this.dictionaryArray.maxValue);
+        this.sliderInputValue = new SliderInputValue(this.sliderContainer, this.inputElement, this.dictionaryArray, this.modelViewClass);
     };
 
     createActivationButton() {
@@ -81,9 +90,10 @@ export class Slider {
 class SliderInputValue {
     inputValue: HTMLInputElement;
     lastInputValue: number;
+    value!: number;
     
     constructor(private sliderContainer: HTMLDivElement,private inputElement: HTMLInputElement, 
-                private minValue: number, private maxValue: number) {
+                private dictionaryArray: sliderDictionaryInterface, private modelViewclass: ModelView) {
         this.inputValue = document.createElement('input');
         this.inputValue.type = 'text';
         this.inputValue.inputMode= 'numeric';
@@ -97,17 +107,22 @@ class SliderInputValue {
 
     sliderValueEventListener() {
         this.inputElement.addEventListener('input', () => {
-            this.lastInputValue = Number(this.inputElement.value);
+            this.value = Number(this.inputElement.value);
+            this.lastInputValue = this.value;
             this.inputValue.value = this.inputElement.value + '˚';
+            this.dictionaryArray.value = this.value;
+            this.modelViewclass.rotatePiece(this.dictionaryArray);
         });
         this.inputValue.addEventListener('change', () => {
             let valueFixed: number | string = this.inputValue.value.replace(/[^0-9.]/g, '');
             if ( valueFixed ) {
-                valueFixed = Number(Number(valueFixed).toFixed(0));
-                if ( valueFixed >= this.minValue && valueFixed <= this.maxValue ) {
-                    this.lastInputValue = valueFixed;
+                this.value = Number(Number(valueFixed).toFixed(0));
+                if ( this.value >= this.dictionaryArray.minValue && this.value <= this.dictionaryArray.maxValue ) {
+                    this.lastInputValue = this.value;
                     this.inputElement.value = valueFixed.toString();
                     this.inputValue.value = valueFixed + '˚';
+                    this.dictionaryArray.value = this.value;
+                    this.modelViewclass.rotatePiece(this.dictionaryArray);
                 } else {
                     this.wrongValue();
                 }
@@ -126,4 +141,5 @@ class SliderInputValue {
         this.inputValue.classList.add('shake');
         setTimeout(() => this.inputValue.classList.remove('shake'), 500);
     };
+
 };

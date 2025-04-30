@@ -1,4 +1,4 @@
-import { Slider } from "../.";
+import { ModelView, Slider } from "../.";
 import { sliderDictionaryInterface } from ".";
 
 export class ControlPanel {
@@ -6,7 +6,7 @@ export class ControlPanel {
     title!: HTMLHeadingElement;
     slidersArray!: HTMLDivElement[];
     
-    constructor(private hostDiv: HTMLElement) {
+    constructor(private hostDiv: HTMLElement, private modelViewClass: ModelView) {
     };
 
     createContainer() {
@@ -29,7 +29,7 @@ export class ControlPanel {
     addSliders(slidersDictionaryArray: sliderDictionaryInterface[]) {
         this.slidersArray = [];
         slidersDictionaryArray.forEach((sliderDictionary) => {
-            const slider = new Slider(this.ControlPanelContainer, sliderDictionary);
+            const slider = new Slider(this.ControlPanelContainer, sliderDictionary, this.modelViewClass);
             const sliderDivElement = slider.addSlider()
             this.slidersArray.push(sliderDivElement);
         });

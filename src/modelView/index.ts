@@ -1,3 +1,4 @@
+export * as THREE from 'three';
 export { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 export { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 export { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
