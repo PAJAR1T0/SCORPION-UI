@@ -1,4 +1,4 @@
-import { lockLogo, unlockLogo } from ".";
+import { lockSymbol, unlockSymbol, StorageClass  } from ".";
 import { THREE } from "../modelView/index";
 import { ModelView } from "../.";
 
@@ -27,7 +27,8 @@ export class Slider {
     activationButton!: HTMLButtonElement;
     sliderInputValue!: SliderInputValue;
 
-    constructor(private hostDiv: HTMLElement, private dictionaryArray: sliderDictionaryInterface, private modelViewClass: ModelView) {
+    constructor( private dictionaryArray: sliderDictionaryInterface, private modelViewClass: ModelView, 
+                 private changeStorageFunction: StorageClass['changeStorage']) {
         this.isActive = true;
     };
 
@@ -55,12 +56,13 @@ export class Slider {
     };
 
     createSliderValueInput() {
-        this.sliderInputValue = new SliderInputValue(this.sliderContainer, this.inputElement, this.dictionaryArray, this.modelViewClass);
+        this.sliderInputValue = new SliderInputValue(this.sliderContainer, this.inputElement, 
+            this.dictionaryArray, this.modelViewClass, this.changeStorageFunction);
     };
 
     createActivationButton() {
         this.activationButton = document.createElement('button');
-        this.activationButton.innerHTML = unlockLogo;
+        this.activationButton.innerHTML = unlockSymbol;
         this.activationButton.classList.add('activationButton');
         this.sliderContainer.appendChild(this.activationButton);
         this.activationButtonEventListener();
@@ -70,7 +72,7 @@ export class Slider {
         this.activationButton.addEventListener('click', () => {
             this.isActive = ( this.isActive ) ? false : true;
             this.activationButton.id = ( this.isActive ) ? '' : 'buttonInactive';
-            this.activationButton.innerHTML = ( this.isActive ) ? unlockLogo : lockLogo;
+            this.activationButton.innerHTML = ( this.isActive ) ? unlockSymbol : lockSymbol;
             this.inputElement.disabled = ( this.isActive ) ? false : true;
             this.sliderInputValue.changeInputState(this.isActive);
         })
@@ -82,7 +84,6 @@ export class Slider {
         this.createInput();
         this.createSliderValueInput();
         this.createActivationButton();
-        this.hostDiv.appendChild(this.sliderContainer);
         return this.sliderContainer;
     };
 };
@@ -93,7 +94,8 @@ class SliderInputValue {
     value!: number;
     
     constructor(private sliderContainer: HTMLDivElement,private inputElement: HTMLInputElement, 
-                private dictionaryArray: sliderDictionaryInterface, private modelViewclass: ModelView) {
+                private dictionaryArray: sliderDictionaryInterface, private modelViewclass: ModelView,
+                private changeStorageFunction: StorageClass['changeStorage']) {
         this.inputValue = document.createElement('input');
         this.inputValue.type = 'text';
         this.inputValue.inputMode= 'numeric';
@@ -112,10 +114,12 @@ class SliderInputValue {
             this.inputValue.value = this.inputElement.value + '˚';
             this.dictionaryArray.value = this.value;
             this.modelViewclass.rotatePiece(this.dictionaryArray);
+            this.changeStorageFunction(this.dictionaryArray.id, this.dictionaryArray.value);
         });
         this.inputValue.addEventListener('change', () => {
             let valueFixed: number | string = this.inputValue.value.replace(/[^0-9.]/g, '');
             if ( valueFixed ) {
+                console.log(valueFixed)
                 this.value = Number(Number(valueFixed).toFixed(0));
                 if ( this.value >= this.dictionaryArray.minValue && this.value <= this.dictionaryArray.maxValue ) {
                     this.lastInputValue = this.value;
@@ -123,6 +127,7 @@ class SliderInputValue {
                     this.inputValue.value = valueFixed + '˚';
                     this.dictionaryArray.value = this.value;
                     this.modelViewclass.rotatePiece(this.dictionaryArray);
+                    this.changeStorageFunction(this.dictionaryArray.id, this.dictionaryArray.value);
                 } else {
                     this.wrongValue();
                 }

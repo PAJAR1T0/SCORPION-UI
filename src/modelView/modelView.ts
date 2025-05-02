@@ -1,5 +1,5 @@
 import { THREE, OrbitControls, GLTFLoader, DRACOLoader, arm } from '.';
-import { sliderDictionaryInterface } from '../controlPanel/index'
+import { slidersDictionaryArray } from '../controlPanel/index';
 
 export class ModelView {
     canvasContainer: HTMLCanvasElement;
@@ -87,7 +87,7 @@ export class ModelView {
         control.addEventListener('change', () => this.renderer.render(this.scene, this.camera));
     };
 
-    loadModel(slidersDictionaryArray: sliderDictionaryInterface[]) {
+    loadModel() {
         this.startThreeJs();
         this.dracoLoader = new DRACOLoader();
         this.dracoLoader.setDecoderPath('/draco/');

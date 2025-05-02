@@ -96,6 +96,44 @@ h1 {
   cursor: not-allowed;
 }
 
+#questionContainer {
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#questionContainer h2 {
+  text-align: center;
+  font-size: 3dvh;
+}
+
+#questionContainer button {
+  text-align: center;
+  background-color: transparent;
+  outline: none;
+  border: solid .15dvh white;
+  height: 5dvh;
+  width: 5dvh;
+  margin: 0 1dvw;
+  padding: 0;
+  border-radius: 100%;
+  transition: all 0.4s ease;
+}
+
+#questionContainer svg {
+  height: 40%;
+}
+
+#questionContainer button:hover {
+  background-color: #696969;
+  transform: scale(1.2);
+  cursor: pointer;
+  box-shadow: 0 0 1dvh rgba(255, 255, 255, 1);
+}
+
+
 input[type='text'] {
   background-color: transparent;
   border: none;
@@ -253,6 +291,7 @@ input[type="range"]:active::-moz-range-thumb {
   border-radius: 10dvw;
   background-color: transparent;
   transition: all 0.4s ease;
+  cursor: pointer;
 }
 
 .activationButton:hover {
@@ -271,14 +310,12 @@ input[type="range"]:active::-moz-range-thumb {
   background-color: #7c7c7c;
   color: white;
   transform: scale(1.2);
-  cursor: pointer;
 }
 
 .activationButton:active {
   background-color: #8c8b8b;
   border: none;
   transform: scale(1.4);
-  cursor: pointer;
 }
 
 
